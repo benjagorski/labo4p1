@@ -11,7 +11,8 @@ function App() {
   const [flashIndex, setFlashIndex] = useState(0);
   const [isFlashing, setIsFlashing] = useState(false);
   const [gameMessage, setGameMessage] = useState('Click Start to play');
-  
+  const [score, setScore] = useState(0);
+
   const flashInterval = useRef(null);
 
   // Generar una nueva secuencia al comenzar el juego
@@ -70,14 +71,16 @@ function App() {
     if (newUserSequence.length === sequence.length) {
       if (newUserSequence.every((val, index) => val === sequence[index])) {
         setGameMessage('Correct!');
+        setScore(score + 1); // Incrementa el puntaje
         setTimeout(() => {
           setGameMessage('Next round...');
           generateSequence();
         }, 2000); // Muestra "Correct!" por 2 segundos
       } else {
-        setGameMessage('Game Over! Click Start to play again.');
+        setGameMessage(`Game Over! Final score: ${score}`);
         setIsGameOn(false);
         setSequence([]);
+        setScore(0); // Reiniciar puntaje
       }
     }
   };
@@ -87,12 +90,14 @@ function App() {
       <div className="info">
         <h1>Simon Dice</h1>
         <p>{gameMessage}</p>
+        <p>Puntuación: {score}</p> {/* Mostrar la puntuación */}
         <button onClick={() => setIsGameOn(true)}>Start</button>
         <button onClick={() => {
           setIsGameOn(false);
           setSequence([]);
           setUserSequence([]);
           setGameMessage('Click Start to play');
+          setScore(0); // Reinicia la puntuación
         }}>Reset</button>
       </div>
       <div className="game-board">
